@@ -944,8 +944,7 @@
           tba: "سيتم الإعلان قريبًا",
         },
       };
-      let lang = "en",
-        playing = false;
+      let lang = "en";
       const $ = (s) => document.querySelector(s);
       const setText = (s, t) => {
         const e = $(s);
@@ -1073,28 +1072,36 @@
         }
         updateMusicUI();
       }
+
       musicBtn.addEventListener("click", async () => {
         if (!bgMusic) return;
         try {
           if (bgMusic.paused) {
             await bgMusic.play();
             audioReady = true;
-          } else bgMusic.pause();
+          } else {
+            bgMusic.pause();
+          }
         } catch (e) {}
         updateMusicUI();
       });
+
       ["click", "touchstart", "scroll"].forEach((evt) =>
         window.addEventListener(evt, attemptAutoplay, {
           once: true,
           passive: true,
         }),
       );
+
       document.addEventListener("DOMContentLoaded", attemptAutoplay, {
         once: true,
       });
+
       bgMusic?.addEventListener("play", updateMusicUI);
       bgMusic?.addEventListener("pause", updateMusicUI);
-      updateMusicUI();
+
+      // Try to start music as soon as the page loads.
+      attemptAutoplay();
       // Decorative rose petals fall across the hero, with staggered entrances.
       const petalField = $("#petalField");
       for (let i = 0; i < 42; i++) {
